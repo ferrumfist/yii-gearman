@@ -1,4 +1,4 @@
-yii2-gearman
+yii2-gearman 
 ============
 
 This extension built on [this](https://github.com/Filsh/yii2-gearman) and [this](https://github.com/sinergi/gearman) and [this](https://github.com/shakura/yii2-gearman)

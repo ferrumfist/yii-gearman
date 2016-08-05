@@ -3,7 +3,7 @@
     "description": "Gearman handler for PHP (fork)",
     "keywords": ["yii", "extension"],
     "homepage": "https://github.com/ferrumfist/yii-gearman",
-    "type": "yii2-extension",
+    "type": "yii-extension",
     "license": "MIT",
     "support": {
         "email": "ferrumfist@gmail.com",

@@ -1,11 +1,11 @@
 <?php
-namespace micmorozov\yii2\gearman;
+namespace ferrumfist\yii\gearman;
 
 use Serializable;
 use GearmanException;
 use GearmanWorker;
 use Psr\Log\LoggerInterface;
-use micmorozov\yii2\gearman\exception\ServerConnectionException;
+use ferrumfist\yii\gearman\exception\ServerConnectionException;
 
 class Worker
 {

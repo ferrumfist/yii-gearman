@@ -1,14 +1,14 @@
 <?php
 
-namespace micmorozov\yii2\gearman;
+namespace ferrumfist\yii\gearman;
 
 use Yii;
-use micmorozov\yii2\gearman\Application;
-use micmorozov\yii2\gearman\Dispatcher;
-use micmorozov\yii2\gearman\Config;
-use micmorozov\yii2\gearman\Process;
+use ferrumfist\yii\gearman\Application;
+use ferrumfist\yii\gearman\Dispatcher;
+use ferrumfist\yii\gearman\Config;
+use ferrumfist\yii\gearman\Process;
 
-class GearmanComponent extends \yii\base\Component
+class GearmanComponent extends \CComponent
 {
     public $servers;
 
@@ -24,12 +24,17 @@ class GearmanComponent extends \yii\base\Component
 
     private $_process;
 
+    public function init(){
+    	
+    }
+    
     public function getApplication()
     {
         if ($this->_application === null) {
             $app = [];
             foreach ($this->jobs as $name => $job) {
-                $job = Yii::createObject($job);
+            	
+                $job = Yii::createComponent($job);
                 if (!($job instanceof JobInterface)) {
                     throw new \yii\base\InvalidConfigException('Gearman job must be instance of JobInterface.');
                 }

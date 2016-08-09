@@ -1,4 +1,4 @@
-yii2-gearman
+yii-gearman
 ============
 
 This extension built on [this](https://github.com/Filsh/yii2-gearman) and [this](https://github.com/sinergi/gearman) and [this](https://github.com/shakura/yii2-gearman)
@@ -22,7 +22,7 @@ It is recommended that you install the Gearman library [through composer](http:/
 ```php
 'components' => [
   'gearman' => [
-      'class' => 'micmorozov\yii2\gearman\GearmanComponent',
+      'class' => 'ferrumfist\yii\gearman\GearmanComponent',
       'servers' => [
           ['host' => '127.0.0.1', 'port' => 4730],
       ],
@@ -39,7 +39,7 @@ It is recommended that you install the Gearman library [through composer](http:/
 ...
 'controllerMap' => [
     'gearman' => [
-        'class' => 'micmorozov\yii2\gearman\GearmanController',
+        'class' => 'ferrumfist\yii\gearman\GearmanController',
         'gearmanComponent' => 'gearman',
     ],
     ...
@@ -51,7 +51,7 @@ It is recommended that you install the Gearman library [through composer](http:/
 ```php
 namespace common\jobs;
 
-use micmorozov\yii2-gearman\JobBase;
+use ferrumfist\yii-gearman\JobBase;
 
 class SyncCalendar extends JobBase
 {
@@ -62,23 +62,17 @@ class SyncCalendar extends JobBase
 }
 ```
 
-## Manage workers
 
-```cmd
-yii gearman/start  // start the worker
-yii gearman/restart  // restart worker
-yii gearman/stop // stop worker
-```
 
 ## Example using Dispatcher
 
 ```php
-Yii::$app->gearman->getDispatcher()->background('syncCalendar', new JobWorkload([
+Yii::app()->gearman->getDispatcher()->background('syncCalendar', new JobWorkload([
     'params' => [
         'data' => 'value'
     ]
 ])); // run in background
-Yii::$app->gearman->getDispatcher()->execute('syncCalendar', new JobWorkload([
+Yii::app()->gearman->getDispatcher()->execute('syncCalendar', new JobWorkload([
     'params' => [
         'data' => 'value'
     ]

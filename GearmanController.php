@@ -1,14 +1,13 @@
 <?php
 
-namespace micmorozov\yii2\gearman;
+namespace ferrumfist\yii\gearman;
 
 use Yii;
-use yii\console\Controller;
 use yii\helpers\Console;
-use micmorozov\yii2\gearman\Process;
-use micmorozov\yii2\gearman\MasterApplication;
+use ferrumfist\yii\gearman\Process;
+use ferrumfist\yii\gearman\MasterApplication;
 
-class GearmanController extends Controller
+class GearmanController extends \CController
 {
     /**
      * @var boolean whether to run the forked process.

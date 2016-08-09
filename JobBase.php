@@ -1,8 +1,8 @@
 <?php
 
-namespace micmorozov\yii2\gearman;
+namespace ferrumfist\yii\gearman;
 
-abstract class JobBase extends \yii\base\Component implements JobInterface
+abstract class JobBase extends \CComponent implements JobInterface
 {
     protected $name;
     public $count=1;

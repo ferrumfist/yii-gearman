@@ -1,5 +1,5 @@
 <?php
-namespace micmorozov\yii2\gearman;
+namespace ferrumfist\yii\gearman;
 
 use Serializable;
 use InvalidArgumentException;

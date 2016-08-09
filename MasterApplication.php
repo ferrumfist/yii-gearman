@@ -1,8 +1,8 @@
 <?php
-namespace micmorozov\yii2\gearman;
+namespace ferrumfist\yii\gearman;
 
 use Yii;
-use micmorozov\yii2\gearman\Application;
+use ferrumfist\yii\gearman\Application;
 
 declare(ticks = 1);
 class MasterApplication
@@ -93,17 +93,12 @@ class MasterApplication
     }
     
     protected function getApplication(){
-    	$component = Yii::$app->get($this->gearmanComponent);
+    	$component = Yii::app()->getComponent($this->gearmanComponent);
     	return $component->getApplication();
     }
     
     protected function runApplication(Application $app){
     	$fork = (bool)$this->fork;
-    	if ($fork) {
-    		//$this->stdout("Success: Process is started\n", Console::FG_GREEN);
-    	} else {
-    		//$this->stdout("Success: Process is started, but not daemonized\n", Console::FG_YELLOW);
-    	}
     
     	$parent = $app->run((bool)$this->fork);
     	

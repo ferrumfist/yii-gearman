@@ -1,6 +1,6 @@
 <?php
 
-namespace micmorozov\yii2\gearman;
+namespace ferrumfist\yii\gearman;
 
 class JobWorkload extends \yii\base\Object implements \Serializable
 {

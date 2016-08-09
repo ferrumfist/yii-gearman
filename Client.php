@@ -1,10 +1,10 @@
 <?php
-namespace micmorozov\yii2\gearman;
+namespace ferrumfist\yii\gearman;
 
 use GearmanException;
 use GearmanClient;
 use Psr\Log\LoggerInterface;
-use micmorozov\yii2\gearman\ServerConnectionException;
+use ferrumfist\yii\gearman\ServerConnectionException;
 
 class Client
 {

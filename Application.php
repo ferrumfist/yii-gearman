@@ -271,6 +271,9 @@ class Application
         pcntl_signal(SIGUSR1, function () use ($root) {
             $root->setKill(true);
         });
+        pcntl_signal(SIGTERM, function () use ($root) {
+        	$root->setKill(true);
+        });
         return $this;
     }
 

@@ -17,7 +17,11 @@ class MasterApplication
     private $process;
     
     private $signalCommand;
+    private $waitAllChildrenStop = false;
 
+    //list PIDS of children
+    private $childrenPids = [];
+    
     /**
      * @param unknown $gearmanComponent
      * @param unknown $fork
@@ -66,7 +70,13 @@ class MasterApplication
     }
     
     protected function startApp($app){
-    	return $this->runApplication($app);
+    	$parent = $this->runApplication($app);
+    	
+    	//save child pid in the parent's list
+    	if( $parent )
+    		$this->childrenPids[] = $app->getPid();
+    	
+    	return $parent;
     }
     
     public function stop(){
@@ -83,7 +93,7 @@ class MasterApplication
     		 
     		$process = $value->getProcess($value->workerId);
     		 
-    		$process->stop(true);
+    		$process->stop();
     	}
     }
     
@@ -105,19 +115,29 @@ class MasterApplication
     	return $parent;
     }
     
-    protected function recoverChild(){
-    	$pid = pcntl_waitpid(-1, $status, WNOHANG);
+    protected function getStoppedChildren(){
+    	$pids = [];
     	
+    	$pid = pcntl_waitpid(-1, $status, WNOHANG);
+    	 
     	// Пока есть завершенные дочерние процессы
     	while ($pid > 0) {
+    		$pids[] = $pid;
+    		 
+    		$pid = pcntl_waitpid(-1, $status, WNOHANG);
+    	}
+    	 
+    	return $pids;
+    }
+    
+    protected function recoverChild($pids){
+    	foreach($pids as $pid){
     		$app = $this->getAppByPid($pid);
-    	
+    		 
     		$parent = $this->startApp($app);
     		
     		if( !$parent )
     			return false;
-    	
-    		$pid = pcntl_waitpid(-1, $status, WNOHANG);
     	}
     	
     	return true;
@@ -142,16 +162,31 @@ class MasterApplication
     		sleep(5);
     		
     		if( $this->signalCommand == 'kill' ){
+    			$this->waitAllChildrenStop = true;
     			$this->stopChildren();
     			
-    			exit(0);
+    			//exit(0);
     		}
     		
     		if( $this->signalCommand == 'signalChild' ){
-    			$parent = $this->recoverChild();
+    			$pids = $this->getStoppedChildren();
     			
-    			if( !$parent )
-    				break;
+    			//delete pids from list
+    			$this->childrenPids = array_diff( $this->childrenPids, $pids );
+    			
+    			//there is no children
+    			if( count($this->childrenPids) == 0 ){
+    				
+    				exit(0);
+    			}
+    			
+    			//if we do not wait when all cheldren stopped
+    			if( !$this->waitAllChildrenStop ){
+	    			$parent = $this->recoverChild($pids);
+	    			
+	    			if( !$parent )
+	    				break;
+    			}
     		}
     		
     		$this->signalCommand = '';

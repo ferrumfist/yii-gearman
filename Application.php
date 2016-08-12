@@ -284,7 +284,7 @@ class Application
     private function createLoop($restart = false)
     {
         $worker = $this->getWorker()->getWorker();
-        $worker->setTimeout(0);
+        $worker->setTimeout(-1);
 
         $callbacks = $this->getCallbacks();
 

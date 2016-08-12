@@ -48,6 +48,7 @@ class MasterApplication
     		
     		//создаем дочернии процессы-воркеры
     		$apps = $this->getApplication();
+    		$parent = true;
     		foreach ($apps as $app) {
     			$parent = $this->startApp($app);
     			

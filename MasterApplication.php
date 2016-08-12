@@ -48,7 +48,7 @@ class MasterApplication
     		
     		//создаем дочернии процессы-воркеры
     		$apps = $this->getApplication();
-    		$parent = true;
+    		//$parent = true;
     		foreach ($apps as $app) {
     			$parent = $this->startApp($app);
     			
@@ -165,8 +165,6 @@ class MasterApplication
     		if( $this->signalCommand == 'kill' ){
     			$this->waitAllChildrenStop = true;
     			$this->stopChildren();
-    			
-    			//exit(0);
     		}
     		
     		if( $this->signalCommand == 'signalChild' ){
@@ -177,7 +175,6 @@ class MasterApplication
     			
     			//there is no children
     			if( count($this->childrenPids) == 0 ){
-    				
     				exit(0);
     			}
     			

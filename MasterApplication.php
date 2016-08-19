@@ -109,11 +109,7 @@ class MasterApplication
     }
     
     protected function runApplication(Application $app){
-    	$fork = (bool)$this->fork;
-    
-    	$parent = $app->run((bool)$this->fork);
-    	
-    	return $parent;
+    	return $app->run((bool)$this->fork);
     }
     
     protected function getStoppedChildren(){

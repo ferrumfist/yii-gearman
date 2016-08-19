@@ -39,6 +39,8 @@ class GearmanComponent extends \CComponent
                     throw new \yii\base\InvalidConfigException('Gearman job must be instance of JobInterface.');
                 }
 
+				$job->init();
+
                 $job->setName($name);
                 for ($i = 0; $i < $job->count; $i++) {
 

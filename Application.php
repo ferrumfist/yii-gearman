@@ -289,16 +289,12 @@ class Application
 
         $callbacks = $this->getCallbacks();
 
-        if ($this->kill) {
-            return;
-        }
-
         while ($worker->work() || $worker->returnCode() == GEARMAN_TIMEOUT) {
+			pcntl_signal_dispatch();
+
             if ($this->getKill()) {
                 break;
             }
-
-            pcntl_signal_dispatch();
 
             if (count($callbacks)) {
                 foreach ($callbacks as $callback) {

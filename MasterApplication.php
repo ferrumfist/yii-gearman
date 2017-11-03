@@ -90,6 +90,7 @@ class MasterApplication
         if( isset($stdStreams['STDIN']) && $stdStreams['STDIN'] ){
             if (is_resource(STDIN)){
                 fclose(STDIN);
+
                 $this->stdIn = fopen(Yii::getPathOfAlias($stdStreams['STDIN']), 'r');
             }
         }
@@ -98,6 +99,11 @@ class MasterApplication
             if (is_resource(STDOUT)){
                 fclose(STDOUT);
 
+                $path = Yii::getPathOfAlias($stdStreams['STDOUT']);
+                $dirPath = dirname($path);
+                if(!is_dir($dirPath))
+                    mkdir(dirname($path), 0777, true);
+
                 $this->stdIn = fopen(Yii::getPathOfAlias($stdStreams['STDOUT']), 'ab');
             }
         }
@@ -105,6 +111,12 @@ class MasterApplication
         if( isset($stdStreams['STDERR']) && $stdStreams['STDERR'] ){
             if (is_resource(STDERR)){
                 fclose(STDERR);
+
+                $path = Yii::getPathOfAlias($stdStreams['STDERR']);
+                $dirPath = dirname($path);
+                if(!is_dir($dirPath))
+                    mkdir($dirPath, 0777, true);
+
                 $this->stdErr = fopen(Yii::getPathOfAlias($stdStreams['STDERR']), 'ab');
             }
         }

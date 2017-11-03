@@ -21,6 +21,10 @@ class MasterApplication
 
     //list PIDS of children
     private $childrenPids = [];
+
+    private $stdIn;
+    private $stdOut;
+    private $stdErr;
     
     /**
      * @param unknown $gearmanComponent
@@ -33,11 +37,13 @@ class MasterApplication
     }
     
     public function start(){
+        $this->closeStdStreams();
+
     	//после команды "старт" создадим дочерний поток,
     	//который будет следить за воркерами
     	
     	$this->stop();
-    	
+
     	$pid = pcntl_fork();
     	
     	$observeMaster = (bool)$pid == 0;
@@ -48,10 +54,17 @@ class MasterApplication
     		
     		//создаем дочернии процессы-воркеры
     		$apps = $this->getApplication();
-    		//$parent = true;
+
+    		//запоминаем ИД родительского процесса
+    		$parentId = getmypid();
+
     		foreach ($apps as $app) {
-    			$parent = $this->startApp($app);
-    			
+                $this->startApp($app);
+
+    			//после запуска JOB`ов происходит fork поэтому проверяем
+                // в каком процессе находися
+    			$parent = $parentId == getmypid();
+
     			//чтобы дочерние больше не порождали процессы
     			if( !$parent )
     				return ;
@@ -68,6 +81,33 @@ class MasterApplication
     		//родитель ничего не делает
     		return true;
     	}
+    }
+
+    protected function closeStdStreams(){
+        $gearmanComponent = Yii::app()->getComponent($this->gearmanComponent);
+        $stdStreams = $gearmanComponent->getConfig()->getStdStreams();
+
+        if( isset($stdStreams['STDIN']) && $stdStreams['STDIN'] ){
+            if (is_resource(STDIN)){
+                fclose(STDIN);
+                $this->stdIn = fopen(Yii::getPathOfAlias($stdStreams['STDIN']), 'r');
+            }
+        }
+
+        if( isset($stdStreams['STDOUT']) && $stdStreams['STDOUT'] ){
+            if (is_resource(STDOUT)){
+                fclose(STDOUT);
+
+                $this->stdIn = fopen(Yii::getPathOfAlias($stdStreams['STDOUT']), 'ab');
+            }
+        }
+
+        if( isset($stdStreams['STDERR']) && $stdStreams['STDERR'] ){
+            if (is_resource(STDERR)){
+                fclose(STDERR);
+                $this->stdErr = fopen(Yii::getPathOfAlias($stdStreams['STDERR']), 'ab');
+            }
+        }
     }
     
     protected function startApp($app){

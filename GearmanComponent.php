@@ -16,6 +16,12 @@ class GearmanComponent extends \CComponent
 
     public $jobs = [];
 
+    public $stdStreams = [
+        'STDIN' => false,
+        'STDOUT' => false,
+        'STDERR' => false
+    ];
+
     private $_application;
 
     private $_dispatcher;
@@ -77,7 +83,8 @@ class GearmanComponent extends \CComponent
 
             $this->_config = new Config([
                 'servers' => $servers,
-                'user' => $this->user
+                'user' => $this->user,
+                'stdStreams' => $this->stdStreams
             ]);
         }
 
